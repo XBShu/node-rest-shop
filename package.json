@@ -4,7 +4,8 @@
   "description": "Node.js RESTful API tutorial project --building a simple shop API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server",
+    "dev": "nodemon server"
   },
   "keywords": [
     "node",
@@ -15,5 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.5"
   }
 }
