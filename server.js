@@ -1,6 +1,9 @@
-//create server
 const http = require('http');
-const server = http.createServer();
-//assign a port where the project will run on
-const port = proccess.env.PORT || 3000;
+const app = require('./app');
+
+
+const port = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+
 server.listen(port);
