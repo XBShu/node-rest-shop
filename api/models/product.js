@@ -8,4 +8,5 @@ const productSchema = mongoose.Schema({
 });
 
 //Export the schema wrapped in a model
-module.exports = mongoose.model();
+module.exports = mongoose.model('Product', productSchema);
+//Args: conventional name, usually capitalized, and then the variable

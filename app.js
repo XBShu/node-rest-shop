@@ -7,7 +7,11 @@ const mongoose = require('mongoose');
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 
-mongoose.connect('mongodb+srv://shuxin:CkJbBPVdedZ3OpZo@cluster0.hfy84.mongodb.net/<dbname>?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://shuxin:'+process.env.MONGOATLASPW +'@cluster0.hfy84.mongodb.net/<dbname>?retryWrites=true&w=majority',{
+    //will use mongodb client for connecting
+    useMongoClient: true,
+});
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
