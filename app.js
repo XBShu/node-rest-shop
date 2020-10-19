@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 
+mongoose.connect('mongodb+srv://shuxin:CkJbBPVdedZ3OpZo@cluster0.hfy84.mongodb.net/<dbname>?retryWrites=true&w=majority');
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -20,7 +22,7 @@ app.use((req,res,next) => {
         return res.status(200).json({});
     }
 
-    next(); //call next at the end of middle ware of there is no return 
+    next(); //call next at the end of middle ware of there is no return  
 });
 
 
