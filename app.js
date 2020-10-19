@@ -12,6 +12,7 @@ mongoose.connect('mongodb+srv://shuxin:'+process.env.MONGOATLASPW +'@cluster0.hf
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
+mongoose.Promise = global.Promise; //to get rid of DeprecationWarning when removing
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
