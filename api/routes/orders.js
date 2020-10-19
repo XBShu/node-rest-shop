@@ -7,11 +7,15 @@ router.get('/',(req,res,next) =>{
     });
 });
 
-//status code 201 is returned to indicate that something 
-//was succesfully created
+//status code 201 is returned to indicate that something was succesfully created
 router.post('/', (req,res,next) =>{
+    const order = {
+        productId: req.body.productId,
+        quantity: req.body.quantity,
+    }
     res.status(201).json({
-        message: "Order was created"
+        message: "Order was created",
+        order: order,
     });
 });
 

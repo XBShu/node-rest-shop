@@ -10,6 +10,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+//Handlings CORS errors (postman doesn't care about CORS errors)
 app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -19,6 +20,7 @@ app.use((req,res,next) => {
         return res.status(200).json({});
     }
 
+    next(); //call next at the end of middle ware of there is no return 
 });
 
 
