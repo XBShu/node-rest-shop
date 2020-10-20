@@ -7,8 +7,9 @@ const orderSchema = mongoose.Schema({
     /*ID of product ordered
     ref refers to the name of the model we want to connect to, in this case "Product"
     */
-   productId: {type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true},
-   //default value if no value is provided
+    productId: {type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true},
+    productName: {type: String, ref: 'Product'},
+    //default value if no value is provided
     quantity: {type: Number, default: 1},
 });
 

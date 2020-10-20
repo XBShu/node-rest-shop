@@ -25,12 +25,21 @@ router.post('/', (req,res,next) =>{
                 _id: mongoose.Types.ObjectId(),
                 quantity: req.body.quantity,
                 productId: req.body.productId,
+                productName: product.name,
             });
             //save to database
             return order.save(); //return save instead of chaining with then() to avoid too much nesting
 
         }).then(result => {
-            res.status(200).json({message: 'order created', orderId: result.id, productId: result.productId, quantity: result.quantity});
+            res.status(200).json({
+                message: 'order created', 
+                orderId: result.id, 
+                details: {
+                    productId: result.productId,
+                    productName: result.productName,
+                    quantity: result.quantity,
+                },
+            });
         })
         .catch(err => {
             console.log(err);
