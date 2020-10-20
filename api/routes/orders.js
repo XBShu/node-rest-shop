@@ -14,6 +14,14 @@ router.get('/',(req,res,next) => {
 
 //status code 201 is returned to indicate that something was succesfully created
 router.post('/', (req,res,next) =>{
+
+    Product.findById(req.body.productId).then(product => {
+        if(!product){
+            //use return so that all subsequent code is not executed
+            return res.status(404).json({message: 'Product not found'});
+        }
+    })
+
     const order = new Order({
         _id: mongoose.Types.ObjectId(),
         quantity: req.body.quantity,
