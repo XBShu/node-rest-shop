@@ -53,9 +53,11 @@ router.get('/:orderId', (req,res,next) =>{
 });
 
 router.delete('/:orderDelete', (req,res,next) => {
-    res.status(200).json({
-        message: "Order deleted",
-        orderId: req.params.orderDelete
+    Order.remove({_id: req.params.orderDelete}).exec().then(result => {
+        res.status(200).json({message: 'order deleted'});
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({error: err});
     });
 });
 
