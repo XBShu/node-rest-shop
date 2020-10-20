@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Order = require('../models/order');
+const Product = require('../models/product');
 
 router.get('/',(req,res,next) =>{
     res.status(200).json({
@@ -11,13 +12,18 @@ router.get('/',(req,res,next) =>{
 
 //status code 201 is returned to indicate that something was succesfully created
 router.post('/', (req,res,next) =>{
-    const order = {
-        productId: req.body.productId,
+    const order = new Order({
+        _id: mongoose.Types.ObjectId(),
         quantity: req.body.quantity,
-    }
-    res.status(201).json({
-        message: "Order was created",
-        order: order,
+        productId: req.body.productId,
+    });
+
+    //no need to use exec on save functions, exec is for queries
+    order.save().then(result => {
+        res.status(200).json({message: 'order created', orderId : result._id, productId: result.productId, quantity: result.quantity});
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({err: err});
     });
 });
 
