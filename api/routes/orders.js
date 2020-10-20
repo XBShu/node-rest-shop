@@ -4,9 +4,11 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Product = require('../models/product');
 
-router.get('/',(req,res,next) =>{
-    res.status(200).json({
-        message: "orders were fetched"
+router.get('/',(req,res,next) => {
+    Order.find().exec().then(docs => {
+        res.status(200).json(docs);
+    }).catch(err => {
+        res.status(500).json({error: err});
     });
 });
 
