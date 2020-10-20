@@ -1,2 +1,1 @@
-I'm using this project to learn how to build a RESTful API. 
-New features will first be added to the learn branch for testing and then pushed to master.
+In this project I aim to learn how to make a RESTful API using Node.js by following Academind's Node.js YouTube tutorials
