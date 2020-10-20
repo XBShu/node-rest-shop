@@ -1,1 +1,1 @@
-I'm using this project to learn how to build a RESTful API
+I'm using this project to learn how to build a RESTful API by following the Node.js tutorial by Academind on YouTube.
