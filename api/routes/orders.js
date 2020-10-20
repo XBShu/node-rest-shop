@@ -15,32 +15,40 @@ router.get('/',(req,res,next) => {
 //status code 201 is returned to indicate that something was succesfully created
 router.post('/', (req,res,next) =>{
 
-    Product.findById(req.body.productId).then(product => {
-        if(!product){
-            //use return so that all subsequent code is not executed
-            return res.status(404).json({message: 'Product not found'});
-        }
-    })
+    Product.findById(req.body.productId)
+        .then(product => { 
+            if(!product) { //if findById returns null, no such product exists
+                return res.status(404).json({message: 'product not found'});
+            }
+            //else create a new order object
+            const order = new Order({
+                _id: mongoose.Types.ObjectId(),
+                quantity: req.body.quantity,
+                productId: req.body.productId,
+            });
+            //save to database
+            return order.save(); //return save instead of chaining with then() to avoid too much nesting
 
-    const order = new Order({
-        _id: mongoose.Types.ObjectId(),
-        quantity: req.body.quantity,
-        productId: req.body.productId,
-    });
-
-    //no need to use exec on save functions, exec is for queries
-    order.save().then(result => {
-        res.status(200).json({message: 'order created', orderId : result._id, productId: result.productId, quantity: result.quantity});
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json({err: err});
-    });
+        }).then(result => {
+            res.status(200).json({message: 'order created', orderId: result.id, productId: result.productId, quantity: result.quantity});
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({message: 'error', error: err});
+        });
 });
 
 router.get('/:orderId', (req,res,next) =>{
-    res.status(201).json({
-        message: "Order details",
-        orderId: req.params.orderId
+    Order.findById(req.params.orderId).exec().then(order => {
+        res.status(200).json({
+            order: order,
+            request: {
+                type: 'GET',
+                url: 'http://localhost:3000/orders/',
+            },
+        });
+    }).catch(err => {
+        res.status(500).json({error: err});
     });
 });
 
