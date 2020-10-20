@@ -33,12 +33,7 @@ router.post('/', (req,res,next) =>{
         }).then(result => {
             res.status(200).json({
                 message: 'order created', 
-                orderId: result.id, 
-                details: {
-                    productId: result.productId,
-                    productName: result.productName,
-                    quantity: result.quantity,
-                },
+                order: result,
             });
         })
         .catch(err => {
