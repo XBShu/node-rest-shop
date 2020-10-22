@@ -7,6 +7,7 @@ const User = require('../models/user');
 router.post('/signup', (req,res,next) => {
     bcrypt.hash(req.body.password, 10, (err, hash) =>{ //bcrypt is asynchronous 
         if(err) {
+            console.log(err);
             return res.status(500).json({error: err});
         } else { //if hashing is succesful, create new user
             const user = new User({
@@ -17,6 +18,7 @@ router.post('/signup', (req,res,next) => {
             user.save().then(result => {
                 res.status(200).json({message: "user created"});
             }).catch(err => {
+                console.log(`${err}`)
                 res.status(500).json({error: err});
             })
         }
