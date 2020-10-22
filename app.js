@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user')
 
 mongoose.connect('mongodb+srv://shuxin:'+process.env.MONGOATLASPW +'@cluster0.hfy84.mongodb.net/<dbname>?retryWrites=true&w=majority',{
     //will use mongodb client for connecting
@@ -36,6 +37,7 @@ app.use((req,res,next) => {
 //Routes handling requests
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 //Error handling for when no route is able to handle the request
 app.use((req,res,next) =>{
