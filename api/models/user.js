@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
     _ud: mongoose.Schema.Types.ObjectId,
-    email: {type: String, required: true},
+    //unique does NOT validate whether or not emails are unique
+    email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
 });
 
