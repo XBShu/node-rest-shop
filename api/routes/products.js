@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
+
 //lets you adjust how files are stored
 const storage = multer.diskStorage({
     //destination is a function
@@ -62,14 +64,14 @@ router.get('/',(req,res,next) => {
     });
 });
 
-router.post('/', upload.single('productImage'), (req,res,next) => {
-    console.log(req.file);
+//use checkAuth middleware we created
+router.post('/', checkAuth, (req,res,next) => {
     //use mongoose to save the new req as a js object
     const product = new Product({ 
         _id: new mongoose.Types.ObjectId,
         name: req.body.name,
         price: req.body.price,
-        productImage: req.file.path,
+        //productImage: req.file.path,
     });
 
     //store product in database
@@ -82,7 +84,7 @@ router.post('/', upload.single('productImage'), (req,res,next) => {
                 id: result._id,
                 name: result.name,
                 price: result.price,
-                productImage: result.productImage,
+                //productImage: result.productImage,
                 request: {
                     type: "GET",
                     url:'http://localhost:3000/products/' + result._id,
@@ -91,7 +93,7 @@ router.post('/', upload.single('productImage'), (req,res,next) => {
             }
         });
     }).catch(err => {
-        console.log(err);
+        console.log(err + "line 97 in routes/products.js");
         res.status(500).json({
             error: err,
         });

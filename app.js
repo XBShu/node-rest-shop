@@ -12,6 +12,7 @@ mongoose.connect('mongodb+srv://shuxin:'+process.env.MONGOATLASPW +'@cluster0.hf
     //will use mongodb client for connecting
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
 });
 mongoose.Promise = global.Promise; //to get rid of DeprecationWarning when removing
 
