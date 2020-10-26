@@ -5,18 +5,9 @@ const Order = require('../models/order');
 const Product = require('../models/product');
 const checkAuth = require('../middleware/check-auth');
 
+const OrdersController = require('../controllers/orders');
 
-router.get('/', checkAuth, (req,res,next) => {
-    //use populate() method to fill in product info, second argument acts like select() method
-    Order.find().select('product quantity _id').populate('product','name price _id').exec().then(docs => {
-        res.status(200).json({
-            count: docs.length,
-            orders: docs,
-        });
-    }).catch(err => {
-        res.status(500).json({error: err});
-    });
-});
+router.get('/', checkAuth,  OrdersController.orders_get_all);
 
 //status code 201 is returned to indicate that something was succesfully created
 router.post('/', checkAuth, (req,res,next) =>{
