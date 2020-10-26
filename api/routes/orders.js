@@ -1,67 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const Order = require('../models/order');
-const Product = require('../models/product');
 const checkAuth = require('../middleware/check-auth');
-
 const OrdersController = require('../controllers/orders');
 
-router.get('/', checkAuth,  OrdersController.orders_get_all);
+router.get('/', checkAuth,  OrdersController.get_all);
 
-//status code 201 is returned to indicate that something was succesfully created
-router.post('/', checkAuth, (req,res,next) =>{
+router.post('/', checkAuth, OrdersController.create);
 
-    Product.findById(req.body.productId)
-        .then(product => { 
-            if(!product) { //if findById returns null, no such product exists
-                return res.status(404).json({message: 'product not found'});
-            }
-            //else create a new order object
-            const order = new Order({
-                _id: mongoose.Types.ObjectId(),
-                quantity: req.body.quantity,
-                product: req.body.productId,
-            });
-            //save to database
-            return order.save(); //return save instead of chaining with then() to avoid too much nesting
+router.get('/:orderId', checkAuth, OrdersController.findById);
 
-        }).then(result => {
-            res.status(200).json({
-                message: 'order created', 
-                order: result,
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({message: 'error', error: err});
-        });
-});
-
-router.get('/:orderId', checkAuth, (req,res,next) =>{
-    Order.findById(req.params.orderId).populate('product', 'name price _id').exec().then(order => {
-        if(!order){
-            return res.status(404).json({message: 'Order not found'});
-        }
-        res.status(200).json({
-            order: order,
-            request: {
-                type: 'GET',
-                url: 'http://localhost:3000/orders/',
-            },
-        });
-    }).catch(err => {
-        res.status(500).json({error: err});
-    });
-});
-
-router.delete('/:orderDelete', checkAuth, (req,res,next) => {
-    Order.remove({_id: req.params.orderDelete}).exec().then(result => {
-        res.status(200).json({message: 'order deleted'});
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json({error: err});
-    });
-});
+router.delete('/:orderDelete', checkAuth, OrdersController.delete);
 
 module.exports = router;
