@@ -18,8 +18,9 @@ mongoose.Promise = global.Promise; //to get rid of DeprecationWarning when remov
 
 app.use(morgan('dev'));
 app.use('/uploads',express.static('uploads')); //makes uploads folder available to everyone
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
 
 //Handlings CORS errors (postman doesn't care about CORS errors)
 app.use((req,res,next) => {

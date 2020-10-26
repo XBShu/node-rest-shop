@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req,res,next) => {
     try{
+        console.log(`checking req body`)
         console.log(req.body.token);
         //verify (decode and check valid) token from request body
         const decoded = jwt.verify(req.body.token, "secret");
@@ -11,9 +12,10 @@ module.exports = (req,res,next) => {
         console.log("Auth successful");
         //call next if succesfuly authenticated
         next();
-    }catch(error) {
+    } catch(error) {
         return res.status(401).json({
-            message: "Auth failed in check auth",
+            message: "error",
+            error: err,
         });
     }
 };

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const bodyParser = require('body-parser');
 const checkAuth = require('../middleware/check-auth');
 
 //lets you adjust how files are stored
@@ -37,7 +38,6 @@ const upload = multer({
 //import product schema from the models file
 const Product = require('../models/product');
 
-
 //not "/products" because the route was already specified in app.js
 router.get('/',(req,res,next) => {
     //find all elements if no arg is passed
@@ -64,14 +64,17 @@ router.get('/',(req,res,next) => {
     });
 });
 
+const jsonParser = bodyParser.json();
+const urlencodedParser = bodyParser.urlencoded({extended: false});
+
 //use checkAuth middleware we created
-router.post('/', checkAuth, (req,res,next) => {
+router.post('/', upload.single('productImage'), urlencodedParser, checkAuth, (req,res,next) => {
     //use mongoose to save the new req as a js object
     const product = new Product({ 
         _id: new mongoose.Types.ObjectId,
         name: req.body.name,
         price: req.body.price,
-        //productImage: req.file.path,
+        productImage: req.file.path,
     });
 
     //store product in database
