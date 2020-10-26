@@ -2,20 +2,17 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req,res,next) => {
     try{
-        console.log(`checking req body`)
-        console.log(req.body.token);
-        //verify (decode and check valid) token from request body
-        const decoded = jwt.verify(req.body.token, "secret");
+        const token = req.headers.authorization.split(" ")[1];
+        console.log(token)
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
         console.log(`inside try block`); 
         //add new field to request
         req.userData = decoded; 
-        console.log("Auth successful");
         //call next if succesfuly authenticated
         next();
     } catch(error) {
         return res.status(401).json({
-            message: "error",
-            error: err,
+            message: "Auth failed"   
         });
     }
 };

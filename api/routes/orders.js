@@ -3,8 +3,10 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Product = require('../models/product');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/',(req,res,next) => {
+
+router.get('/', checkAuth, (req,res,next) => {
     //use populate() method to fill in product info, second argument acts like select() method
     Order.find().select('product quantity _id').populate('product','name price _id').exec().then(docs => {
         res.status(200).json({
@@ -17,7 +19,7 @@ router.get('/',(req,res,next) => {
 });
 
 //status code 201 is returned to indicate that something was succesfully created
-router.post('/', (req,res,next) =>{
+router.post('/', checkAuth, (req,res,next) =>{
 
     Product.findById(req.body.productId)
         .then(product => { 
@@ -45,7 +47,7 @@ router.post('/', (req,res,next) =>{
         });
 });
 
-router.get('/:orderId', (req,res,next) =>{
+router.get('/:orderId', checkAuth, (req,res,next) =>{
     Order.findById(req.params.orderId).populate('product', 'name price _id').exec().then(order => {
         if(!order){
             return res.status(404).json({message: 'Order not found'});
@@ -62,7 +64,7 @@ router.get('/:orderId', (req,res,next) =>{
     });
 });
 
-router.delete('/:orderDelete', (req,res,next) => {
+router.delete('/:orderDelete', checkAuth, (req,res,next) => {
     Order.remove({_id: req.params.orderDelete}).exec().then(result => {
         res.status(200).json({message: 'order deleted'});
     }).catch(err => {

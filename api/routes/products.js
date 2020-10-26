@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
-const bodyParser = require('body-parser');
 const checkAuth = require('../middleware/check-auth');
 
 //lets you adjust how files are stored
@@ -59,16 +58,13 @@ router.get('/',(req,res,next) => {
         }
         res.status(200).json(response);
     }).catch(err => {
-        console.log(err);
+        console.log(err + "in routesproducts.js #62");
         res.status(500).json({error: err});
     });
 });
 
-const jsonParser = bodyParser.json();
-const urlencodedParser = bodyParser.urlencoded({extended: false});
-
 //use checkAuth middleware we created
-router.post('/', upload.single('productImage'), urlencodedParser, checkAuth, (req,res,next) => {
+router.post('/', checkAuth, upload.single('productImage'),(req,res,next) => {
     //use mongoose to save the new req as a js object
     const product = new Product({ 
         _id: new mongoose.Types.ObjectId,
@@ -97,9 +93,7 @@ router.post('/', upload.single('productImage'), urlencodedParser, checkAuth, (re
         });
     }).catch(err => {
         console.log(err + "line 97 in routes/products.js");
-        res.status(500).json({
-            error: err,
-        });
+        res.status(500).json({error: err});
     }); 
 });
 
@@ -127,7 +121,7 @@ router.get('/:productId', (req,res,next) => {
     });
 });
 
-router.patch('/:productId', (req,res,next) => {
+router.patch('/:productId', checkAuth, (req,res,next) => {
     //identifier for object we want to update
     const id = req.params.productId;
     const updateOps ={}; //placeholder for new values
@@ -151,7 +145,7 @@ router.patch('/:productId', (req,res,next) => {
     });
 });
 
-router.delete('/:productId', (req,res,next) => {
+router.delete('/:productId', checkAuth, (req,res,next) => {
     const id = req.params.productId;
     //remove all the objects that fulfill criteria _id = id
     Product.remove({_id: id}).exec().then(result => {
