@@ -8,7 +8,7 @@ const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user');
 
-mongoose.connect('mongodb+srv://shuxin:'+process.env.MONGOATLASPW +'@cluster0.hfy84.mongodb.net/<dbname>?retryWrites=true&w=majority',{
+mongoose.connect(/*mongodb connection */ ,{
     //will use mongodb client for connecting
     useNewUrlParser: true,
     useUnifiedTopology: true,
